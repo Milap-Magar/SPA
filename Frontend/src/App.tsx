@@ -1,8 +1,18 @@
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { Form } from "./components/";
 
 const App = () => {
   return (
-    <div>App</div>
-  )
-}
+    <Router>
+      <Routes>
+        {/* Login Route */}
+        <Route path="/" element={<Form isRegister={false} />} />
 
-export default App
+        {/* Register Route */}
+        <Route path="/register" element={<Form isRegister={true} />} />
+      </Routes>
+    </Router>
+  );
+};
+
+export default App;
