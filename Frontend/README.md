@@ -42,18 +42,19 @@ Add required variables, such as REACT_APP_API_URL for the backend GraphQL endpoi
    ```
 
 ### Folder Structure
+## Folder Structure
 
+```
 /frontend
-├── /src
-│ ├── /components # Reusable React components
-│ ├── /pages # Page-level components
-│ ├── /graphql # Queries and mutations
-│ ├── /styles # Global and component-specific styles
-│ ├── /utils # Utility functions
-│ ├── /types # Type Defs
-│ ├── /pages # Page seperation
-│ ├── /contexts # Context API for global state
-│ └── /theme # MUI theme customization
+  ├── /src
+      ├── /components    # Reusable React components
+      ├── /pages         # Page-level components
+      ├── /graphql       # Queries and mutations
+      ├── /styles        # Global and component-specific styles
+      ├── /utils         # Utility functions
+      ├── /types         # Type Definitions
+      ├── /contexts      # Context API for global state
+      └── /theme         # MUI theme customization
 
 ### Environment Variables
 

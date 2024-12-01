@@ -10,8 +10,8 @@ A brief description of your project here. For example: _A web application built 
   - [API Documentation](#api-documentation)
   - [Environment Variables](#environment-variables)
   - [Running the Backend](#running-the-backend)
+  
 - [Frontend](#frontend)
-
   - [Technologies](#technologies-1)
   - [Folder Structure](#folder-structure)
   - [Setup](#setup-1)
@@ -70,8 +70,18 @@ This folder contains the backend server for the application.
   }
   ```
 
-- **POST /api/graphql**: Send GraphQL queries and mutations.
+- **POST [Login] /api/graphql** : Send GraphQL queries and mutations.
+  mutation {
+  login(username: "your_username", password: "your_password") {
+    token
+     user {
+      id
+      username
+      }
+    }
+  }
 
+- **POST /api/graphql**: Send GraphQL queries and mutations.
   Example mutation:
 
   ```graphql

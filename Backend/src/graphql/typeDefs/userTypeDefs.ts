@@ -6,8 +6,16 @@ export const userTypeDefs = gql`
     name: String!
     email: String!
   }
+  type AuthPayload {
+    token: String!
+    user: User1!
+  }
 
-  type Query{
-    getUser(id: ID!): User
+  type Query {
+    me: User
+  }
+
+  type Mutation {
+    login(email: String!, password: String!): AuthPayload
   }
 `;
