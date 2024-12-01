@@ -1,50 +1,89 @@
-# React + TypeScript + Vite
+# Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This folder contains the frontend application for the project.
 
-Currently, two official plugins are available:
+## Table of Contents
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- [Frontend](#frontend)
+  - [Technologies](#technologies-1)
+  - [Setup](#setup-1)
+  - [Running the Frontend](#running-the-frontend)
+- [Contributing](#contributing)
 
-## Expanding the ESLint configuration
+### Technologies
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+- **React.js** - JavaScript library for building user interfaces.
+- **TypeScript** - Enhances code quality with strong & strict typing.
+- **Material-UI (MUI)** - Component library for building modern UI.
+- **Styled Components** - For custom and dynamic styling.
+- **GraphQL** - Query language to interact with the backend API.
+- **React Router** - Declarative routing for SPA.
+- **Vite** - Fast build tool and development server.
 
-- Configure the top-level `parserOptions` property like this:
+### Setup
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+1. Clone the repository and navigate to the frontend directory:
+
+   ```bash
+   git clone <your-repository-url>
+   cd <your-project-directory>
+   npm install
+   ```
+
+2. Configure environment variables:
+
+Create a .env file based on the .env.example file in the frontend directory.
+Add required variables, such as REACT_APP_API_URL for the backend GraphQL endpoint.
+
+3. Install dependencies:
+   ```bash
+   npm install
+   ```
+
+### Folder Structure
+
+/frontend
+├── /src
+│ ├── /components # Reusable React components
+│ ├── /pages # Page-level components
+│ ├── /graphql # Queries and mutations
+│ ├── /styles # Global and component-specific styles
+│ ├── /utils # Utility functions
+│ ├── /types # Type Defs
+│ ├── /pages # Page seperation
+│ ├── /contexts # Context API for global state
+│ └── /theme # MUI theme customization
+
+### Environment Variables
+Here are the required environment variables for the frontend:
+
+- `REACT_APP_API_URL`: The backend GraphQL API endpoint.
+- `REACT_APP_ENV`: Specifies the environment (e.g., development, production).
+
+### Running the Frontend
+To start the development server:
+```bash
+Copy code
+npm run dev
 ```
+### Styling
+The project uses:
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+`Material-UI (MUI)` for pre-designed components.
+`Styled Components` for dynamic and reusable CSS-in-JS styling.
+Customize the MUI theme in the theme.js file located in the /src/theme folder.
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+### Build for Production
+To create an optimized production build:
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
+```bash
+Copy code
+npm run build
 ```
+Contributing
+We welcome contributions! Please follow these steps:
+
+### Fork the repository.
+1. Create a new branch for your feature or fix.
+2. Commit your changes with clear descriptions.
+3. Submit a pull request for review.
