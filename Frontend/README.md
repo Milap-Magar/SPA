@@ -6,6 +6,7 @@ This folder contains the frontend application for the project.
 
 - [Frontend](#frontend)
   - [Technologies](#technologies-1)
+  - [Folder Structure](#folder-structure)
   - [Setup](#setup-1)
   - [Running the Frontend](#running-the-frontend)
 - [Contributing](#contributing)
@@ -55,18 +56,23 @@ Add required variables, such as REACT_APP_API_URL for the backend GraphQL endpoi
 │ └── /theme # MUI theme customization
 
 ### Environment Variables
+
 Here are the required environment variables for the frontend:
 
 - `REACT_APP_API_URL`: The backend GraphQL API endpoint.
 - `REACT_APP_ENV`: Specifies the environment (e.g., development, production).
 
 ### Running the Frontend
+
 To start the development server:
+
 ```bash
 Copy code
 npm run dev
 ```
+
 ### Styling
+
 The project uses:
 
 `Material-UI (MUI)` for pre-designed components.
@@ -74,16 +80,19 @@ The project uses:
 Customize the MUI theme in the theme.js file located in the /src/theme folder.
 
 ### Build for Production
+
 To create an optimized production build:
 
 ```bash
 Copy code
 npm run build
 ```
+
 Contributing
 We welcome contributions! Please follow these steps:
 
 ### Fork the repository.
+
 1. Create a new branch for your feature or fix.
 2. Commit your changes with clear descriptions.
 3. Submit a pull request for review.
