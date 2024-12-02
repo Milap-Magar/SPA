@@ -2,11 +2,15 @@ import express from "express";
 import { ApolloServer } from "apollo-server-express";
 import jwt from "jsonwebtoken";
 import mongoose from "mongoose";
+import dotenv from "dotenv";
+
 import { resolvers, typeDefs } from "./graphql";
 import User from "./models/User";
 
+dotenv.config();
+
 mongoose
-  .connect("mongodb://localhost:27017/graphql-login")
+  .connect(process.env.MONGODB_URI as string)
   .then(() => console.log("🚀 MongoDB connected"))
   .catch((error) => console.error(`❌ MongoDB connection error: ${error}`));
 
@@ -19,18 +23,23 @@ const server = new ApolloServer({
     const token = req.headers.authorization || "";
     if (token) {
       try {
-        const decodedToken = jwt.verify(token, "your_jwt_secret") as {
+        const decodedToken = jwt.verify(
+          token,
+          process.env.JWT_SECRET as string
+        ) as {
           userId: string;
         };
         const user = await User.findById(decodedToken.userId);
         return { user };
       } catch (error) {
-        console.error(`🚀Token Verification Error: ${error}`);
+        console.error(`🚀 Token Verification Error: ${error}`);
+        return { error: "Unauthorized Token Access" };
       }
     }
-    return {};
+    return { error: "No token provided" };
   },
 });
+
 const startServer = async () => {
   await server.start();
   server.applyMiddleware({ app });

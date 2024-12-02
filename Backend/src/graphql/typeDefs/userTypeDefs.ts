@@ -6,7 +6,7 @@ export const userTypeDefs = gql`
     email: String!
     role: String!
     address: String!
-    phone: Int!
+    phone: String!
   }
 
   type AuthPayload {
@@ -24,7 +24,7 @@ export const userTypeDefs = gql`
       password: String!
       role: String!
       address: String!
-      phone: Int!
+      phone: String!
     ): User
     login(email: String!, password: String!): AuthPayload
   }

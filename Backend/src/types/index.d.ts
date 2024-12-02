@@ -8,3 +8,11 @@ export interface IUser extends Document {
   phone: number;
   isValidPassword(password: string): Promise<boolean>;
 }
+
+export interface RegisterUserInput {
+  email: string;
+  password: string;
+  role: "user" | "admin";
+  address: string;
+  phone: string;
+}

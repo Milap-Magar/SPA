@@ -12,7 +12,6 @@ export const userResolvers = {
       return user;
     },
   },
-  // Mutation section
   Mutation: {
     register: async (
       _: any,
@@ -47,7 +46,6 @@ export const userResolvers = {
       }
       const newUser = new User(value);
       await newUser.save();
-
       return newUser;
     },
 

@@ -1,6 +1,7 @@
 import Joi from "joi";
+import { RegisterUserInput } from "../types";
 
-export const registerUserSchema = Joi.object({
+export const registerUserSchema = Joi.object<RegisterUserInput>({
   email: Joi.string().email().required().messages({
     "string.email": "Please enter a valid email address.",
     "any.required": "Email is required.",
