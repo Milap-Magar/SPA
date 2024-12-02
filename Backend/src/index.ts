@@ -1,15 +1,16 @@
-import { ApolloServer } from "apollo-server";
-import mongoose from "mongoose";
+import express from "express";
+import { ApolloServer } from "apollo-server-express";
 import jwt from "jsonwebtoken";
+import mongoose from "mongoose";
 import { resolvers, typeDefs } from "./graphql";
-import { userSchema } from "./Model/User";
+import User from "./models/User";
 
 mongoose
-  .connect("mongodb://localhost:27017/graphql-login", {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
-  .then(() => console.log("🚀 MongoDB connected"));
+  .connect("mongodb://localhost:27017/graphql-login")
+  .then(() => console.log("🚀 MongoDB connected"))
+  .catch((error) => console.error(`❌ MongoDB connection error: ${error}`));
+
+const app = express();
 
 const server = new ApolloServer({
   typeDefs,
@@ -18,17 +19,29 @@ const server = new ApolloServer({
     const token = req.headers.authorization || "";
     if (token) {
       try {
-        const { userId } = jwt.verify(token, "your_jwt_secret");
-        const user = await userSchema.findById(userId);
+        const decodedToken = jwt.verify(token, "your_jwt_secret") as {
+          userId: string;
+        };
+        const user = await User.findById(decodedToken.userId);
         return { user };
       } catch (error) {
-        console.log(`🚀Token Verification Error: ${error}`);
+        console.error(`🚀Token Verification Error: ${error}`);
       }
     }
     return {};
   },
 });
+const startServer = async () => {
+  await server.start();
+  server.applyMiddleware({ app });
 
-server.listen().then(({ url }) => {
-  console.log(`🚀 Server listening ${url} 🚀`);
+  app.listen(4000, () => {
+    console.log(
+      `🚀 Server ready at http://localhost:4000${server.graphqlPath}`
+    );
+  });
+};
+
+startServer().catch((error) => {
+  console.error(`❌ Server Error: ${error}`);
 });

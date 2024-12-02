@@ -1,48 +1,79 @@
-const jwt = require("jsonwebtoken");
-const bcrypt = require("bcrypt");
-const User = require("./models/user");
-
-interface Args {
-  email: string;
-  password: string;
-}
-
-interface Context {
-  User: typeof User;
-}
+import { IUser } from "../../types/";
+import jwt from "jsonwebtoken";
+import User from "../../models/User";
+import { registerUserSchema } from "../../validations/validations";
 
 export const userResolvers = {
   Query: {
-    me: async (_: unknown, args: Args, context: Context) => {
-      const { email, password } = args;
-
-      // Validate email and password input
-      if (!email || !password) {
-        throw new Error("Email and password are required");
+    user: async (_: any, __: any, { user }: { user: IUser | null }) => {
+      if (!user) {
+        throw new Error("Not authenticated");
+      }
+      return user;
+    },
+  },
+  // Mutation section
+  Mutation: {
+    register: async (
+      _: any,
+      {
+        email,
+        password,
+        role,
+        address,
+        phone,
+      }: {
+        email: string;
+        password: string;
+        role: string;
+        address: string;
+        phone: string;
+      }
+    ) => {
+      const existingUser = await User.findOne({ email });
+      if (existingUser) {
+        throw new Error("User already exists");
       }
 
-      // Find user by email
-      const user = await context.User.findOne({ email });
+      const { value, error } = registerUserSchema.validate({
+        email,
+        password,
+        role,
+        address,
+        phone,
+      });
+      if (error) {
+        throw new Error(error.details[0].message);
+      }
+      const newUser = new User(value);
+      await newUser.save();
+
+      return newUser;
+    },
+
+    login: async (
+      _: any,
+      { email, password }: { email: string; password: string }
+    ) => {
+      const user = await User.findOne({ email });
       if (!user) {
         throw new Error("User not found");
       }
 
-      // Validate password
-      const isValid = await bcrypt.compare(password, user.password);
+      const isValid = await user.isValidPassword(password);
       if (!isValid) {
         throw new Error("Invalid password");
       }
 
-      // Generate JWT token
-      const token = jwt.sign({ userId: user._id }, "your_jwt_secret", {
-        expiresIn: "1h",
-      });
+      const token = jwt.sign(
+        { userId: user.id, role: user.role },
+        process.env.JWT_SECRET as string,
+        {
+          expiresIn: "1h",
+        }
+      );
 
-      // Return the token and user information
-      return {
-        token,
-        user,
-      };
+      return { token, user };
     },
   },
 };
