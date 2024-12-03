@@ -1,3 +1,4 @@
+import { Task } from "./../../types/index.d";
 import { gql } from "apollo-server-express";
 
 export const taskTypeDefs = gql`
@@ -38,5 +39,13 @@ export const taskTypeDefs = gql`
       dueDate: String!
       status: String!
     ): Task
+    updateTask(
+      ID: id!
+      title: String!
+      description: String!
+      dueDate: String!
+      status: String!
+    ): Task
+    deleteTask(id: ID!): Boolean
   }
 `;

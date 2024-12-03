@@ -9,7 +9,6 @@ export interface IUser extends Document {
   phone: number;
   isValidPassword(password: string): Promise<boolean>;
 }
-
 export interface RegisterUserInput {
   email: string;
   password: string;
@@ -17,6 +16,7 @@ export interface RegisterUserInput {
   address: string;
   phone: string;
 }
+
 // TASK
 export interface ITask extends Document {
   title: string;
