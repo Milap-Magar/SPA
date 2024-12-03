@@ -5,6 +5,7 @@ export interface IUser extends Document {
   email: string;
   password: string;
   role: "user" | "admin";
+  name: string;
   address: string;
   phone: number;
   isValidPassword(password: string): Promise<boolean>;
@@ -13,6 +14,7 @@ export interface RegisterUserInput {
   email: string;
   password: string;
   role: "user" | "admin";
+  name: string;
   address: string;
   phone: string;
 }

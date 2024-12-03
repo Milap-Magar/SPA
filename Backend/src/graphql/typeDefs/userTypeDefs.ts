@@ -5,6 +5,7 @@ export const userTypeDefs = gql`
     id: ID!
     email: String!
     role: String!
+    name: String!
     address: String!
     phone: String!
   }
@@ -22,6 +23,7 @@ export const userTypeDefs = gql`
     register(
       email: String!
       password: String!
+      name: String!
       role: String!
       address: String!
       phone: String!

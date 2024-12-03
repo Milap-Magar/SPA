@@ -13,7 +13,11 @@ export const registerUserSchema = Joi.object<RegisterUserInput>({
   role: Joi.string().valid("user", "admin").required().messages({
     "any.only": "Role must be either 'user' or 'admin'.",
     "any.required": "Role is required.",
-  }), 
+  }),
+  name: Joi.string().min(2).required().messages({
+    "string.min": "Name must be at least 2 characters long.",
+    "any.required": "Password is required.",
+  }),
   address: Joi.string().required().messages({
     "any.required": "Address is required.",
   }),

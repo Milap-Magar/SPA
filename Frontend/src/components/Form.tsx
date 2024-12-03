@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { useMutation } from "@apollo/client";
+import { REGISTER_MUTATION } from "../graphql/mutation";
 import styled from "styled-components";
 
 const Container = styled.div`
@@ -21,7 +23,7 @@ const RegisterText = styled.h5`
 const Label = styled.label`
   display: block;
   margin-bottom: 8px;
-  font-size: 14px;
+  font-size: 0.8em;
   color: #333;
 `;
 const FormContainer = styled.div`
@@ -44,7 +46,6 @@ const FormContainer = styled.div`
     padding: 20px 15px;
   }
 `;
-
 const Text = styled.h5`
   margin-bottom: 20px;
   padding-bottom: 20px;
@@ -55,13 +56,12 @@ const Text = styled.h5`
     font-size: 1em;
   }
 `;
-
 const Input = styled.input`
   width: 100%;
+  border: 1px solid black;
   padding: 8px;
   margin-bottom: 12px;
   border-radius: 4px;
-  border: 1px solid #ccc;
   font-size: 0.85em;
 
   @media (max-width: 768px) {
@@ -69,7 +69,17 @@ const Input = styled.input`
     padding: 6px;
   }
 `;
-
+const Select = styled.select`
+  width: 100%;
+  padding: 10px;
+  background-color: white;
+  color: black;
+  border: 1px solid black;
+  border-radius: 4px;
+  font-size: 0.9em;
+  cursor: pointer;
+  margin-bottom: 5px;
+`;
 const Button = styled.button`
   width: 100%;
   padding: 10px;
@@ -90,22 +100,33 @@ const Button = styled.button`
   }
 `;
 
+type Role = "user" | "admin";
+
 interface FormLogin {
   email: string;
   password: string;
+  role: Role;
 }
 
 interface FormRegister extends FormLogin {
+  name: string;
   address: string;
   phone: string;
 }
 
 const Form = ({ isRegister }: { isRegister: boolean }) => {
-  const [formData, setFormData] = useState<FormLogin | FormRegister>({
-    email: "",
-    password: "",
-    ...(isRegister ? { address: "", phone: "" } : {}),
-  });
+  const [formData, setFormData] = useState<FormLogin | FormRegister>(
+    isRegister
+      ? {
+          email: "",
+          password: "",
+          role: "user",
+          name: "",
+          address: "",
+          phone: "",
+        }
+      : { email: "", password: "", role: "user" }
+  );
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
@@ -114,19 +135,44 @@ const Form = ({ isRegister }: { isRegister: boolean }) => {
     });
   };
 
+  const [register, { data, loading, error }] = useMutation(REGISTER_MUTATION);
+
+  const handleRegister = async () => {
+    try {
+      const registerData = formData as FormRegister;
+      const processedPhone = parseInt(registerData.phone || "0", 10);
+
+      const response = await register({
+        variables: {
+          email: registerData.email,
+          password: registerData.password,
+          name: registerData.name,
+          role: registerData.role,
+          address: registerData.address,
+          phone: processedPhone.toString(),
+        },
+      });
+      console.log("Regristration Successfull", response.data);
+    } catch (error) {
+      console.error("Handle Register Error: ", error);
+    }
+  };
+  const handleLogin = () => {};
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (isRegister) {
-      const registerData = formData as FormRegister;
-      console.log("Processed Phone:", parseInt(registerData.phone || "0", 10));
+      handleRegister();
+    } else {
+      handleLogin();
     }
-    // Code Core login implementation
     console.log(`Form value:`, formData);
   };
 
   return (
     <Container>
       <FormContainer>
+        {data && <p>Registration successful! Welcome, {data.register.name}.</p>}
         <form onSubmit={handleSubmit}>
           <Text>{isRegister ? "Register Form" : "Login Form"}</Text>
           <div>
@@ -149,9 +195,39 @@ const Form = ({ isRegister }: { isRegister: boolean }) => {
               onChange={handleChange}
             />
           </div>
+          <div>
+            <Label
+              htmlFor="role"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Select Role
+            </Label>
+            <Select
+              id="role"
+              name="role"
+              className="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              defaultValue={""}
+            >
+              <option value="" disabled>
+                Select user
+              </option>
+              <option value="admin">Admin</option>
+              <option value="user">User</option>
+            </Select>
+          </div>
 
           {isRegister && (
             <>
+              <div>
+                <Label htmlFor="name">Name</Label>
+                <Input
+                  type="text"
+                  id="name"
+                  name="name"
+                  value={(formData as FormRegister).name}
+                  onChange={handleChange}
+                />
+              </div>
               <div>
                 <Label htmlFor="address">Address</Label>
                 <Input
@@ -174,8 +250,10 @@ const Form = ({ isRegister }: { isRegister: boolean }) => {
               </div>
             </>
           )}
-
-          <Button type="submit">Submit</Button>
+          <Button type="submit" disabled={loading}>
+            {loading ? "Processing..." : isRegister ? "Register" : "Login"}
+          </Button>
+          {error && <p style={{ color: "red" }}>Error: {error.message}</p>}
           <div>
             {isRegister ? (
               <RegisterText>

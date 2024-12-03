@@ -19,12 +19,14 @@ export const userResolvers = {
         email,
         password,
         role,
+        name,
         address,
         phone,
       }: {
         email: string;
         password: string;
         role: string;
+        name: string;
         address: string;
         phone: string;
       }
@@ -38,6 +40,7 @@ export const userResolvers = {
         email,
         password,
         role,
+        name,
         address,
         phone,
       });

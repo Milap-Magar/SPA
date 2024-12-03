@@ -17,10 +17,14 @@ const userSchema = new Schema<IUser>({
     enum: ["user", "admin"],
     default: "user",
   },
+  name: {
+    type: String,
+    required: true,
+  },
   address: {
     type: String,
     required: true,
-  },  
+  },
   phone: {
     type: Number,
     required: true,
