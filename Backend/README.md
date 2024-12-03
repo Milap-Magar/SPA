@@ -54,18 +54,47 @@ This folder contains the backend server for the application.
       email
     }
   }
-  ```
+  ``` 
+## API QUREIS AND MUTATIONS
 
-- **POST [Login] /api/graphql** : Send GraphQL queries and mutations.
+<!-- GRAPHQL API's -->
+- **POST [CREATE-TASK] /api/graphql** : Send GraphQL queries and mutations for adding the TASKS
   mutation {
-  login(username: "your_username", password: "your_password") {
-  token
-  user {
-  id
-  username
+  createTask(
+    title: "New Task"
+    description: "This is a new task"
+    dueDate: "2024-12-15"
+    status: "Pending"
+  ) {
+    id
+    title
+    description
+    dueDate
+    status
   }
+}
+
+- **PUT [UPDATE-TASK] /api/graphql** : Send GraphQL queries and mutations for updating the TASKS
+  mutation {
+  updateTask(
+    id: "1"
+    title: "Updated Task Title"
+    description: "Updated task description"
+    dueDate: "2024-12-20"
+    status: "In Progress"
+  ) {
+    id
+    title
+    description
+    dueDate
+    status
   }
-  }
+}
+
+- **DELETE [DELETE-TASK] /api/graphql** : Send GraphQL queries and mutations for deleting the TASKS.
+mutation {
+  deleteTask(id: "1") 
+}
 
 ### Environment Variables
 

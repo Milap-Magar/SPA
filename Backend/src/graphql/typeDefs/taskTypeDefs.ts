@@ -40,7 +40,7 @@ export const taskTypeDefs = gql`
       status: String!
     ): Task
     updateTask(
-      ID: id!
+      id: ID!
       title: String!
       description: String!
       dueDate: String!

@@ -78,7 +78,6 @@ export const taskResolvers = {
         if (!task) {
           throw new Error("Task not found");
         }
-
         await task.deleteOne({ _id: id });
         return true;
       } catch (error) {
