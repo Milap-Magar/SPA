@@ -71,5 +71,20 @@ export const taskResolvers = {
         throw new Error("Error Updating Task");
       }
     },
+    deleteTask: async (_: any, { id }: { id: string }) => {
+      try {
+        const task = await Task.findById(id);
+
+        if (!task) {
+          throw new Error("Task not found");
+        }
+
+        await task.deleteOne({ _id: id });
+        return true;
+      } catch (error) {
+        console.error("Error deleting task", error);
+        return false;
+      }
+    },
   },
 };
