@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import { useMutation } from "@apollo/client";
-import { REGISTER_MUTATION } from "../graphql/mutation";
+import { LOGIN_MUTATION, REGISTER_MUTATION } from "../graphql/mutation";
 import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const Container = styled.div`
   display: flex;
@@ -127,6 +129,7 @@ const Form = ({ isRegister }: { isRegister: boolean }) => {
         }
       : { email: "", password: "", role: "user" }
   );
+  const navigate = useNavigate();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
@@ -135,7 +138,12 @@ const Form = ({ isRegister }: { isRegister: boolean }) => {
     });
   };
 
-  const [register, { data, loading, error }] = useMutation(REGISTER_MUTATION);
+  const [
+    register,
+    { data: registerData, loading: registerLoading, error: registerError },
+  ] = useMutation(REGISTER_MUTATION);
+  const [login, { data: loginData, loading: loginLoading, error: loginError }] =
+    useMutation(LOGIN_MUTATION);
 
   const handleRegister = async () => {
     try {
@@ -153,11 +161,40 @@ const Form = ({ isRegister }: { isRegister: boolean }) => {
         },
       });
       console.log("Regristration Successfull", response.data);
+      toast.success("Registration Successful!", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+      navigate("/");
     } catch (error) {
-      console.error("Handle Register Error: ", error);
+      toast.error("Handle Register Error: ");
     }
   };
-  const handleLogin = () => {};
+
+  const handleLogin = async () => {
+    try {
+      const loginData = formData as FormLogin;
+      const response = await login({
+        variables: {
+          email: loginData.email,
+          password: loginData.password,
+          role: loginData.role,
+        },
+      });
+      console.log("Login Success", response.data);
+      navigate("/dashboard");
+      toast.success("Logged In ");
+      localStorage.setItem("token", response.data.login.token);
+    } catch (error) {
+      toast.error("Error Logging In!");
+    }
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -166,13 +203,16 @@ const Form = ({ isRegister }: { isRegister: boolean }) => {
     } else {
       handleLogin();
     }
-    console.log(`Form value:`, formData);
+    // console.log(`Form value:`, formData);
   };
 
   return (
     <Container>
       <FormContainer>
-        {data && <p>Registration successful! Welcome, {data.register.name}.</p>}
+        {registerData && (
+          <p>Registration successful! Welcome, {registerData.register.name}.</p>
+        )}
+        {loginData && <p>Login Sucess, Welcome, {loginData.login.name}.</p>}
         <form onSubmit={handleSubmit}>
           <Text>{isRegister ? "Register Form" : "Login Form"}</Text>
           <div>
@@ -215,7 +255,6 @@ const Form = ({ isRegister }: { isRegister: boolean }) => {
               <option value="user">User</option>
             </Select>
           </div>
-
           {isRegister && (
             <>
               <div>
@@ -250,10 +289,19 @@ const Form = ({ isRegister }: { isRegister: boolean }) => {
               </div>
             </>
           )}
-          <Button type="submit" disabled={loading}>
-            {loading ? "Processing..." : isRegister ? "Register" : "Login"}
+          <Button type="submit" disabled={registerLoading || loginLoading}>
+            {registerLoading || loginLoading
+              ? "Processing..."
+              : isRegister
+              ? "Register"
+              : "Login"}
           </Button>
-          {error && <p style={{ color: "red" }}>Error: {error.message}</p>}
+          {registerError && (
+            <p style={{ color: "red" }}>Error: {registerError.message}</p>
+          )}
+          {loginError && (
+            <p style={{ color: "red" }}>Error: {loginError.message}</p>
+          )}
           <div>
             {isRegister ? (
               <RegisterText>

@@ -1,15 +1,19 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
-import Form from "./components/Form";
+import { ApolloProvider } from "@apollo/client";
+import { client } from "../src/services/services";
 
-const client = new ApolloClient({
-  uri: "http://localhost:4000/graphql",
-  cache: new InMemoryCache(),
-});
+// Toastify
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+import Form from "./components/Form";
+import PrivateRoute from "./Private/PrivateRoute";
+import { Dashboard } from "./page/";
 
 const App = () => {
   return (
     <ApolloProvider client={client}>
+      <ToastContainer />
       <Router>
         <Routes>
           {/* Login Route */}
@@ -17,6 +21,16 @@ const App = () => {
 
           {/* Register Route */}
           <Route path="/register" element={<Form isRegister={true} />} />
+
+          {/* Protected Dashboard Route */}
+          <Route
+            path="/dashboard"
+            element={
+              <PrivateRoute>
+                <Dashboard />
+              </PrivateRoute>
+            }
+          />
         </Routes>
       </Router>
     </ApolloProvider>
