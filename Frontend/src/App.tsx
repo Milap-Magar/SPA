@@ -9,30 +9,33 @@ import "react-toastify/dist/ReactToastify.css";
 import Form from "./components/Form";
 import PrivateRoute from "./Private/PrivateRoute";
 import { Dashboard } from "./page/";
+import { AuthProvider } from "./context/authContext";
 
 const App = () => {
   return (
     <ApolloProvider client={client}>
-      <ToastContainer />
-      <Router>
-        <Routes>
-          {/* Login Route */}
-          <Route path="/" element={<Form isRegister={false} />} />
+      <AuthProvider>
+        <ToastContainer />
+        <Router>
+          <Routes>
+            {/* Login Route */}
+            <Route path="/" element={<Form isRegister={false} />} />
 
-          {/* Register Route */}
-          <Route path="/register" element={<Form isRegister={true} />} />
+            {/* Register Route */}
+            <Route path="/register" element={<Form isRegister={true} />} />
 
-          {/* Protected Dashboard Route */}
-          <Route
-            path="/dashboard"
-            element={
-              <PrivateRoute>
-                <Dashboard />
-              </PrivateRoute>
-            }
-          />
-        </Routes>
-      </Router>
+            {/* Protected Dashboard Route */}
+            <Route
+              path="/dashboard"
+              element={
+                <PrivateRoute>
+                  <Dashboard />
+                </PrivateRoute>
+              }
+            />
+          </Routes>
+        </Router>
+      </AuthProvider>
     </ApolloProvider>
   );
 };
