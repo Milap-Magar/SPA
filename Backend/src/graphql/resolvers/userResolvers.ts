@@ -74,7 +74,7 @@ export const userResolvers = {
         }
       );
 
-      return { token, user };
+      return { id: user.id, token, user };
     },
   },
 };

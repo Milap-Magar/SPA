@@ -46,3 +46,7 @@ export interface TaskConnection {
   edges: Task[];
   pageInfo: PageInfo;
 }
+
+export type Role = {
+  role: "user" | "admin";
+};
