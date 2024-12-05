@@ -4,6 +4,7 @@ import { LOGIN_MUTATION, REGISTER_MUTATION } from "../graphql/mutation";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { useUser } from "../hooks/useUser";
 
 const Container = styled.div`
   display: flex;
@@ -130,7 +131,6 @@ const Form = ({ isRegister }: { isRegister: boolean }) => {
       : { email: "", password: "", role: "user" }
   );
   const navigate = useNavigate();
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
       ...formData,
@@ -160,7 +160,7 @@ const Form = ({ isRegister }: { isRegister: boolean }) => {
           phone: processedPhone.toString(),
         },
       });
-      console.log("Regristration Successfull", response.data);
+      // console.log("Regristration Successfull", response.data);
       toast.success("Registration Successful!", {
         position: "top-right",
         autoClose: 3000,
@@ -178,6 +178,7 @@ const Form = ({ isRegister }: { isRegister: boolean }) => {
   };
 
   const handleLogin = async () => {
+    const { setUser } = useUser();
     try {
       const loginData = formData as FormLogin;
       const response = await login({
@@ -187,7 +188,8 @@ const Form = ({ isRegister }: { isRegister: boolean }) => {
           role: loginData.role,
         },
       });
-      console.log("Login Success", response.data);
+      // console.log("Login Success", response.data);
+      setUser({ email: loginData.email, role: loginData.role });
       navigate("/dashboard");
       toast.success("Logged In ");
       localStorage.setItem("token", response.data.login.token);

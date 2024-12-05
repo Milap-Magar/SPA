@@ -18,3 +18,8 @@ export interface IUser extends Document {
   role: "user" | "admin";
   isValidPassword(password: string): Promise<boolean>;
 }
+
+export declare interface userContextType {
+  user: { email: string; role: string } | null;
+  setUser: React.Dispatch<React.SetStateAction<UserContextType["user"]>>;
+}
