@@ -4,7 +4,7 @@ import { LOGIN_MUTATION, REGISTER_MUTATION } from "../graphql/mutation";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { useUser } from "../hooks/useUser";
+// import { useUser } from "../hooks/useUser";
 
 const Container = styled.div`
   display: flex;
@@ -178,7 +178,7 @@ const Form = ({ isRegister }: { isRegister: boolean }) => {
   };
 
   const handleLogin = async () => {
-    const { setUser } = useUser();
+    // const { setUser } = useUser();
     try {
       const loginData = formData as FormLogin;
       const response = await login({
@@ -189,7 +189,7 @@ const Form = ({ isRegister }: { isRegister: boolean }) => {
         },
       });
       // console.log("Login Success", response.data);
-      setUser({ email: loginData.email, role: loginData.role });
+      // setUser({ email: loginData.email, role: loginData.role });
       navigate("/dashboard");
       toast.success("Logged In ");
       localStorage.setItem("token", response.data.login.token);
