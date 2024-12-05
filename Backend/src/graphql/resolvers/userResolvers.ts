@@ -11,6 +11,16 @@ export const userResolvers = {
       }
       return user;
     },
+    userID: async (
+      _: any,
+      __: any,
+      { currentUser }: { currentUser: IUser | null }
+    ) => {
+      if (!currentUser) { 
+        throw new Error("Not authenticated");
+      }
+      return await User.findById(currentUser.id);
+    },
   },
   Mutation: {
     register: async (
