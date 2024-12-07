@@ -16,7 +16,7 @@ export const userResolvers = {
       __: any,
       { currentUser }: { currentUser: IUser | null }
     ) => {
-      if (!currentUser) { 
+      if (!currentUser) {
         throw new Error("Not authenticated");
       }
       return await User.findById(currentUser.id);

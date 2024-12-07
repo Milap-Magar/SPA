@@ -24,7 +24,7 @@ const server = new ApolloServer({
     if (token) {
       try {
         const decodedToken = jwt.verify(
-          token,
+          token.replace("Bearer", ""),
           process.env.JWT_SECRET as string
         ) as {
           userId: string;
