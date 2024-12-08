@@ -17,20 +17,23 @@ const Container = styled.div`
     padding: 20px;
   }
 `;
+
 const RegisterText = styled.h5`
   margin-top: 20px;
   padding-top: 20px;
   text-align: center;
   font-size: 0.7em;
 `;
+
 const Label = styled.label`
   display: block;
   margin-bottom: 8px;
   font-size: 0.8em;
   color: #333;
 `;
+
 const FormContainer = styled.div`
-  width: 400px; /* Fixed width for desktops */
+  width: 400px;
   height: auto;
   background-color: #f9f9f9;
   border-radius: 8px;
@@ -41,14 +44,15 @@ const FormContainer = styled.div`
   text-align: start;
 
   @media (max-width: 1024px) {
-    width: 80%; /* Use percentage width for tablets */
+    width: 80%;
   }
 
   @media (max-width: 768px) {
-    width: 90%; /* Use percentage width for mobile */
+    width: 90%;
     padding: 20px 15px;
   }
 `;
+
 const Text = styled.h5`
   margin-bottom: 20px;
   padding-bottom: 20px;
@@ -59,6 +63,7 @@ const Text = styled.h5`
     font-size: 1em;
   }
 `;
+
 const Input = styled.input`
   width: 100%;
   border: 1px solid black;
@@ -72,6 +77,7 @@ const Input = styled.input`
     padding: 6px;
   }
 `;
+
 const Select = styled.select`
   width: 100%;
   padding: 10px;
@@ -83,6 +89,7 @@ const Select = styled.select`
   cursor: pointer;
   margin-bottom: 5px;
 `;
+
 const Button = styled.button`
   width: 100%;
   padding: 10px;
@@ -132,18 +139,19 @@ const Form = ({ isRegister }: { isRegister: boolean }) => {
   );
   const { setUser } = useUser();
   const navigate = useNavigate();
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
     });
   };
 
-  const [
-    register,
-    { data: registerData, loading: registerLoading, error: registerError },
-  ] = useMutation(REGISTER_MUTATION);
-  const [login, { data: loginData, loading: loginLoading, error: loginError }] =
+  const [register, { loading: registerLoading, error: registerError }] =
+    useMutation(REGISTER_MUTATION);
+  const [login, { loading: loginLoading, error: loginError }] =
     useMutation(LOGIN_MUTATION);
 
   const handleRegister = async () => {
@@ -180,8 +188,6 @@ const Form = ({ isRegister }: { isRegister: boolean }) => {
         },
       });
 
-      console.log("Login Success:", response.data);
-
       const { token, user } = response.data.login;
       localStorage.setItem("token", token);
       setUser(user);
@@ -205,10 +211,6 @@ const Form = ({ isRegister }: { isRegister: boolean }) => {
   return (
     <Container>
       <FormContainer>
-        {registerData && (
-          <p>Registration successful! Welcome, {registerData.register.name}.</p>
-        )}
-        {loginData && <p>Login Sucess, Welcome, {loginData.login.name}.</p>}
         <form onSubmit={handleSubmit}>
           <Text>{isRegister ? "Register Form" : "Login Form"}</Text>
           <div>
@@ -232,12 +234,7 @@ const Form = ({ isRegister }: { isRegister: boolean }) => {
             />
           </div>
           <div>
-            <Label
-              htmlFor="role"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Select Role
-            </Label>
+            <Label htmlFor="role">Select Role</Label>
             <Select
               id="role"
               name="role"
@@ -245,7 +242,6 @@ const Form = ({ isRegister }: { isRegister: boolean }) => {
               onChange={(e) =>
                 setFormData({ ...formData, role: e.target.value as Role })
               }
-              className="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
             >
               <option value="" disabled>
                 Select role

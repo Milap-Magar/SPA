@@ -8,14 +8,14 @@ export const UserContext = createContext<userContextType | undefined>(
 
 export const UserContextProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<userContextType["user"]>(null);
-  
+
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
-      console.log("Token found:", token);
+      // console.log("Token found:", token);
       try {
         const decodedUser = jwtDecode<userContextType["user"]>(token);
-        console.log("Decoded user:", decodedUser);
+        // console.log("Decoded user:", decodedUser);
         setUser(decodedUser);
       } catch (error) {
         console.error("Error decoding token:", error);
