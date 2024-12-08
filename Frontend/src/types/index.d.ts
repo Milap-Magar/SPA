@@ -20,6 +20,12 @@ export interface IUser extends Document {
 }
 
 export declare interface userContextType {
-  user: { email: string; role: string } | null;
-  setUser: React.Dispatch<React.SetStateAction<UserContextType["user"]>>;
+  user: {
+    id: string;
+    name: string;
+    email: string;
+    address: string;
+    phone: string;
+  } | null;
+  setUser: React.Dispatch<React.SetStateAction<userContextType["user"]>>;
 }

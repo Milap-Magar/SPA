@@ -4,7 +4,7 @@ import { LOGIN_MUTATION, REGISTER_MUTATION } from "../graphql/mutation";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-// import { useUser } from "../hooks/useUser";
+import { useUser } from "../hooks/useUser";
 
 const Container = styled.div`
   display: flex;
@@ -130,6 +130,7 @@ const Form = ({ isRegister }: { isRegister: boolean }) => {
         }
       : { email: "", password: "", role: "user" }
   );
+  const { setUser } = useUser();
   const navigate = useNavigate();
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
@@ -160,25 +161,15 @@ const Form = ({ isRegister }: { isRegister: boolean }) => {
           phone: processedPhone.toString(),
         },
       });
-      // console.log("Regristration Successfull", response.data);
-      toast.success("Registration Successful!", {
-        position: "top-right",
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "colored",
-      });
+
+      toast.success("Registration Successful!");
       navigate("/");
-    } catch (error) {
-      toast.error("Handle Register Error: ");
+    } catch (error: any) {
+      toast.error(`Registration Failed: ${error.message}`);
     }
   };
 
   const handleLogin = async () => {
-    // const { setUser } = useUser();
     try {
       const loginData = formData as FormLogin;
       const response = await login({
@@ -188,13 +179,17 @@ const Form = ({ isRegister }: { isRegister: boolean }) => {
           role: loginData.role,
         },
       });
-      // console.log("Login Success", response.data);
-      // setUser({ email: loginData.email, role: loginData.role });
+
+      console.log("Login Success:", response.data);
+
+      const { token, user } = response.data.login;
+      localStorage.setItem("token", token);
+      setUser(user);
+
       navigate("/dashboard");
-      toast.success("Logged In ");
-      localStorage.setItem("token", response.data.login.token);
-    } catch (error) {
-      toast.error("Error Logging In!");
+      toast.success(`Logged in as ${user.name}`);
+    } catch (error: any) {
+      toast.error(`Error Logging In: ${error.message}`);
     }
   };
 
@@ -205,7 +200,6 @@ const Form = ({ isRegister }: { isRegister: boolean }) => {
     } else {
       handleLogin();
     }
-    // console.log(`Form value:`, formData);
   };
 
   return (
@@ -247,11 +241,14 @@ const Form = ({ isRegister }: { isRegister: boolean }) => {
             <Select
               id="role"
               name="role"
+              value={formData.role}
+              onChange={(e) =>
+                setFormData({ ...formData, role: e.target.value as Role })
+              }
               className="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-              defaultValue={""}
             >
               <option value="" disabled>
-                Select user
+                Select role
               </option>
               <option value="admin">Admin</option>
               <option value="user">User</option>
