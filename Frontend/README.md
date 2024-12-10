@@ -18,6 +18,7 @@ This folder contains the frontend application for the project.
 - **Material-UI (MUI)** - Component library for building modern UI.
 - **Styled Components** - For custom and dynamic styling.
 - **GraphQL** - Query language to interact with the backend API.
+- **Redux** - Redux state management tool
 - **React Router** - Declarative routing for SPA.
 - **Vite** - Fast build tool and development server.
 

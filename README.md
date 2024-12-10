@@ -30,6 +30,15 @@ A brief description of your project here. For example: _A web application built 
 
 This folder contains the backend server for the application.
 
+## Table of Contents
+
+- [Backend](#backend)
+  - [Technologies](#technologies)
+  - [Setup](#setup)
+  - [API Documentation](#api-documentation)
+  - [Environment Variables](#environment-variables)
+  - [Running the Backend](#running-the-backend)
+
 ### Technologies
 
 - **Node.js** - JavaScript runtime for the backend.
@@ -61,42 +70,119 @@ This folder contains the backend server for the application.
 
 ### API Documentation
 
-- **GET /api/graphql**: Access the GraphQL API endpoint. Use tools like GraphiQL or Apollo Studio to test your queries.
+<!-- Login API Documentation -->
 
-  Example query:
+### Login Api Documentation
 
-  ```graphql
-  query {
-    users {
+- **POST [LOGIN] /api/graphql**
+
+```graphql
+mutation login($email: String!, $password: String!, $role: String!) {
+  login(email: $email, password: $password, role: $role) {
+    user {
       id
       name
       email
     }
   }
-  ```
+}
+```
 
-- **POST [Login] /api/graphql** : Send GraphQL queries and mutations.
-  mutation {
-  login(username: "your_username", password: "your_password") {
-  token
-  user {
-  id
-  username
-  }
-  }
-  }
+### Register Api Documentation
 
-- **POST /api/graphql**: Send GraphQL queries and mutations.
-  Example mutation:
+- **POST [REGISTER] /api/graphql**
 
-  ```graphql
-  mutation {
-    createUser(name: "John Doe", email: "john.doe@example.com") {
-      id
-      name
-    }
+```graphql
+mutation register(
+  $email: String!
+  $password: String!
+  $name: String!
+  $role: String!
+  $address: String!
+  $phone: String!
+) {
+  register(
+    email: $email
+    password: $password
+    name: $name
+    role: $role
+    address: $address
+    phone: $phone
+  ) {
+    id
+    name
+    email
+    role
   }
-  ```
+}
+```
+
+### FETCH user Data Documentation
+
+<!-- Fetch user data -->
+
+- **GET [USER DATA] /api/graphql** : Get User details.
+
+```graphql
+query FetchUser {
+  userID {
+    id
+    name
+    email
+  }
+}
+```
+
+## API QUREIS AND MUTATIONS FOR CREATING & OTHER STUFFS
+
+<!-- GRAPHQL API's -->
+
+- **POST [CREATE-TASK] /api/graphql** : Send GraphQL queries and mutations for adding the TASKS
+
+```graphql
+mutation {
+  createTask(
+    title: "New Task"
+    description: "This is a new task"
+    dueDate: "2024-12-15"
+    status: "Pending"
+  ) {
+    id
+    title
+    description
+    dueDate
+    status
+  }
+}
+```
+
+- **PUT [UPDATE-TASK] /api/graphql** : Send GraphQL queries and mutations for updating the TASKS
+
+```graphql
+mutation {
+  updateTask(
+    id: "1"
+    title: "Updated Task Title"
+    description: "Updated task description"
+    dueDate: "2024-12-20"
+    status: "In Progress"
+  ) {
+    id
+    title
+    description
+    dueDate
+    status
+  }
+}
+```
+
+- **DELETE [DELETE-TASK] /api/graphql** : Send GraphQL queries and mutations for deleting the TASKS.
+
+```graphql
+mutation {
+  deleteTask(id: "1")
+}
+```
 
 ### Environment Variables
 
