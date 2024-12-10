@@ -236,7 +236,7 @@ Add required variables, such as REACT_APP_API_URL for the backend GraphQL endpoi
    ```
 
 ### Folder Structure
-
+```bash
 /frontend
 ├── /src
 │ ├── /components # Reusable React components
@@ -248,7 +248,7 @@ Add required variables, such as REACT_APP_API_URL for the backend GraphQL endpoi
 │ ├── /pages # Page seperation
 │ ├── /contexts # Context API for global state
 │ └── /theme # MUI theme customization
-
+```
 ### Environment Variables
 
 Here are the required environment variables for the frontend:
