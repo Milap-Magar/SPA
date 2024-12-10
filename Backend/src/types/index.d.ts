@@ -9,6 +9,7 @@ export interface IUser extends Document {
   address: string;
   phone: number;
   isValidPassword(password: string): Promise<boolean>;
+  [key: string]: any;
 }
 export interface RegisterUserInput {
   email: string;

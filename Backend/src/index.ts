@@ -24,19 +24,23 @@ const server = new ApolloServer({
     if (token) {
       try {
         const decodedToken = jwt.verify(
-          token.replace("Bearer", ""),
+          token.replace("Bearer ", ""),
           process.env.JWT_SECRET as string
-        ) as {
-          userId: string;
-        };
+        ) as { userId: string };
+
         const user = await User.findById(decodedToken.userId);
-        return { user };
+
+        if (!user) {
+          throw new Error("User not found");
+        }
+
+        return { currentUser: user };
       } catch (error) {
-        console.error(`🚀 Token Verification Error: ${error}`);
-        return { error: "Unauthorized Token Access" };
+        console.error("Token verification error:", error);
+        return { currentUser: null };
       }
     }
-    return { error: "No token provided" };
+    return { currentUser: null };
   },
 });
 

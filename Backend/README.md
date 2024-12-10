@@ -42,21 +42,58 @@ This folder contains the backend server for the application.
 
 ### API Documentation
 
-- **GET /api/graphql**: Access the GraphQL API endpoint. Use tools like GraphiQL or Apollo Studio to test your queries.
+<!-- Login API Documentation -->
 
-  Example query:
+### Login Api Documentation
 
-  ```graphql
-  query {
-    users {
+- **POST [LOGIN] /api/graphql**
+```graphql
+mutation login($email: String!, $password: String!, $role: String!) {
+  login(email: $email, password: $password, role: $role) {
+    user {
       id
       name
-      email
+      email 
     }
   }
+}
   ``` 
-## API QUREIS AND MUTATIONS
 
+### Register Api Documentation
+
+- **POST [REGISTER] /api/graphql**
+```graphql
+  mutation register(
+  $email: String!, 
+  $password: String!, 
+  $name: String!, 
+  $role: String!, 
+  $address: String!, 
+  $phone: String!
+) { 
+  register(
+    email: $email, 
+    password: $password, 
+    name: $name, 
+    role: $role, 
+    address: $address, 
+    phone: $phone
+  ) {
+    id
+    name
+    email
+    role
+  }
+}
+
+```
+
+
+### FETCH user Data Documentation
+<!-- Fetch user data -->
+- **GET [USER DATA] /api/graphql** : Get User details.
+
+## API QUREIS AND MUTATIONS FOR CREATING & OTHER STUFFS
 <!-- GRAPHQL API's -->
 - **POST [CREATE-TASK] /api/graphql** : Send GraphQL queries and mutations for adding the TASKS
   mutation {

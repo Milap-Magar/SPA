@@ -2,6 +2,7 @@ import { IUser } from "../../types/";
 import jwt from "jsonwebtoken";
 import User from "../../models/User";
 import { registerUserSchema } from "../../validations/validations";
+// import { verifyToken } from "../../middleware/verifyToken";
 
 export const userResolvers = {
   Query: {
@@ -12,15 +13,37 @@ export const userResolvers = {
       return user;
     },
     userID: async (
-      _: any,
-      __: any,
+      _: unknown,
+      { id }: { id?: string | null },
       { currentUser }: { currentUser: IUser | null }
     ) => {
       if (!currentUser) {
         throw new Error("Not authenticated");
       }
-      return await User.findById(currentUser.id);
+
+      const userId = id || currentUser.id; 
+      const user = await User.findById(userId);
+
+      if (!user) {
+        throw new Error("User not found");
+      }
+
+      return user;
     },
+    // getUsersDetails: async (_: any, __: any, { token }: { token: string }) => {
+    //   console.log("🚀 ~ getUsersDetails: ~ token:", token);
+
+    //   const userData = verifyToken({ token });
+    //   if (!userData) {
+    //     throw new Error("Invalid or expired token");
+    //   }
+    //   // const user = await User.findById(userData.userId);
+    //   // if (!user) {
+    //   //   throw new Error("User not found");
+    //   // }
+    //   // return user;
+    //   return userData;
+    // },
   },
   Mutation: {
     register: async (
@@ -83,7 +106,7 @@ export const userResolvers = {
           expiresIn: "1h",
         }
       );
-
+      // console.log("🚀 ~ token:", token);
       return { id: user.id, token, user };
     },
   },
