@@ -92,10 +92,21 @@ mutation login($email: String!, $password: String!, $role: String!) {
 ### FETCH user Data Documentation
 <!-- Fetch user data -->
 - **GET [USER DATA] /api/graphql** : Get User details.
+```graphql
+query FetchUser {
+  userID {
+    id
+    name
+    email
+  }
+}
+```
+
 
 ## API QUREIS AND MUTATIONS FOR CREATING & OTHER STUFFS
 <!-- GRAPHQL API's -->
 - **POST [CREATE-TASK] /api/graphql** : Send GraphQL queries and mutations for adding the TASKS
+```graphql
   mutation {
   createTask(
     title: "New Task"
@@ -110,8 +121,9 @@ mutation login($email: String!, $password: String!, $role: String!) {
     status
   }
 }
-
+```
 - **PUT [UPDATE-TASK] /api/graphql** : Send GraphQL queries and mutations for updating the TASKS
+```graphql
   mutation {
   updateTask(
     id: "1"
@@ -127,12 +139,13 @@ mutation login($email: String!, $password: String!, $role: String!) {
     status
   }
 }
-
+```
 - **DELETE [DELETE-TASK] /api/graphql** : Send GraphQL queries and mutations for deleting the TASKS.
+```graphql
 mutation {
   deleteTask(id: "1") 
 }
-
+```
 ### Environment Variables
 
 Here are the environment variables needed to run the backend:
