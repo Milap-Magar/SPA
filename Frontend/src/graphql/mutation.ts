@@ -25,19 +25,11 @@ export const REGISTER_MUTATION = gql`
     }
   }
 `;
-  
+
 export const LOGIN_MUTATION = gql`
   mutation login($email: String!, $password: String!, $role: String!) {
     login(email: $email, password: $password, role: $role) {
       token
-      user {
-        id
-        name
-        email
-        role
-        address 
-        phone
-      }
     }
   }
 `;

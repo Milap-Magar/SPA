@@ -3,6 +3,7 @@ import { Document } from "mongoose";
 declare interface FormLogin {
   email: string;
   password: string;
+  role?: "user" | "admin";
 }
 
 declare interface FormRegister {
@@ -28,4 +29,15 @@ export declare interface userContextType {
     phone: string;
   } | null;
   setUser: React.Dispatch<React.SetStateAction<userContextType["user"]>>;
+}
+declare interface User {
+  id: string;
+  name: string;
+  email: string;
+}
+
+declare interface DataContextType {
+  userData: User | null;
+  loading: boolean;
+  fetchUser: () => Promise<void>;
 }
