@@ -135,7 +135,7 @@ const Sidebar = ({ children }: { children: ReactNode }) => {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" noWrap component="div">
-            Collapsible Sidebar
+            Task Assigning System
           </Typography>
         </Toolbar>
       </AppBar>
