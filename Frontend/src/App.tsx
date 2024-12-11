@@ -10,32 +10,35 @@ import PrivateRoute from "./Private/PrivateRoute";
 import { Dashboard } from "./page/";
 import { AuthProvider } from "./context/authContext";
 import { UserContextProvider } from "./context/userContext";
+import { DataProvider } from "./context/dataContext";
 
 const App = () => {
   return (
     <ApolloProvider client={client}>
       <AuthProvider>
         <UserContextProvider>
-          <ToastContainer />
-          <Router>
-            <Routes>
-              {/* Login Route */}
-              <Route path="/" element={<Form isRegister={false} />} />
+          <DataProvider>
+            <ToastContainer />
+            <Router>
+              <Routes>
+                {/* Login Route */}
+                <Route path="/" element={<Form isRegister={false} />} />
 
-              {/* Register Route */}
-              <Route path="/register" element={<Form isRegister={true} />} />
+                {/* Register Route */}
+                <Route path="/register" element={<Form isRegister={true} />} />
 
-              {/* Protected Dashboard Route */}
-              <Route
-                path="/dashboard"
-                element={
-                  <PrivateRoute>
-                    <Dashboard />
-                  </PrivateRoute>
-                }
-              />
-            </Routes>
-          </Router>
+                {/* Protected Dashboard Route */}
+                <Route
+                  path="/dashboard"
+                  element={
+                    <PrivateRoute>
+                      <Dashboard />
+                    </PrivateRoute>
+                  }
+                />
+              </Routes>
+            </Router>
+          </DataProvider>
         </UserContextProvider>
       </AuthProvider>
     </ApolloProvider>

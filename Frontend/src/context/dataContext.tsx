@@ -14,10 +14,27 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
   const fetchUser = async () => {
     try {
       setLoading(true);
-      const response = await AxiosInstance.get<User>("/user");
-      setUserData(response.data);
+
+      const query = `
+        query FetchUser {
+          userID {
+            id
+            name
+            email
+            phone
+            address
+          }
+        }
+      `;
+
+      const requestBody = {
+        query,
+      };
+
+      const response = await AxiosInstance.post("/", requestBody);
+      setUserData(response.data.data.userID); 
     } catch (error) {
-      setLoading(false);
+      console.error("Error fetching user:", error);
     } finally {
       setLoading(false);
     }
