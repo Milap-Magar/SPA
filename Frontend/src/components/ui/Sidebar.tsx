@@ -1,6 +1,4 @@
-import { ReactNode, useState } from "react";
 import * as React from "react";
-
 import { styled, useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Drawer from "@mui/material/Drawer";
@@ -10,9 +8,6 @@ import Toolbar from "@mui/material/Toolbar";
 import List from "@mui/material/List";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
-
-// import { tasksNav } from "../../constants/";
-// Icons
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
@@ -21,7 +16,6 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-
 import AddTaskIcon from "@mui/icons-material/AddTask";
 import SubjectIcon from "@mui/icons-material/Subject";
 import HistoryIcon from "@mui/icons-material/History";
@@ -30,31 +24,26 @@ import SettingsIcon from "@mui/icons-material/Settings";
 import AssignmentIndIcon from "@mui/icons-material/AssignmentInd";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { useNavigate } from "react-router-dom";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+import TextField from "@mui/material/TextField";
+import Button from "@mui/material/Button";
 
 const drawerWidth = 240;
 
 const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })<{
   open?: boolean;
-}>(({ theme }) => ({
+}>(({ theme, open }) => ({
   flexGrow: 1,
   padding: theme.spacing(3),
   transition: theme.transitions.create("margin", {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
   }),
-  marginLeft: `-${drawerWidth}px`,
-  variants: [
-    {
-      props: ({ open }) => open,
-      style: {
-        transition: theme.transitions.create("margin", {
-          easing: theme.transitions.easing.easeOut,
-          duration: theme.transitions.duration.enteringScreen,
-        }),
-        marginLeft: 0,
-      },
-    },
-  ],
+  marginLeft: open ? 0 : `-${drawerWidth}px`,
 }));
 
 interface AppBarProps extends MuiAppBarProps {
@@ -63,24 +52,19 @@ interface AppBarProps extends MuiAppBarProps {
 
 const AppBar = styled(MuiAppBar, {
   shouldForwardProp: (prop) => prop !== "open",
-})<AppBarProps>(({ theme }) => ({
+})<AppBarProps>(({ theme, open }) => ({
   transition: theme.transitions.create(["margin", "width"], {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
   }),
-  variants: [
-    {
-      props: ({ open }) => open,
-      style: {
-        width: `calc(100% - ${drawerWidth}px)`,
-        marginLeft: `${drawerWidth}px`,
-        transition: theme.transitions.create(["margin", "width"], {
-          easing: theme.transitions.easing.easeOut,
-          duration: theme.transitions.duration.enteringScreen,
-        }),
-      },
-    },
-  ],
+  ...(open && {
+    width: `calc(100% - ${drawerWidth}px)`,
+    marginLeft: `${drawerWidth}px`,
+    transition: theme.transitions.create(["margin", "width"], {
+      easing: theme.transitions.easing.easeOut,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+  }),
 }));
 
 const DrawerHeader = styled("div")(({ theme }) => ({
@@ -91,11 +75,11 @@ const DrawerHeader = styled("div")(({ theme }) => ({
   justifyContent: "flex-end",
 }));
 
-// Sidebar Component
-const Sidebar = ({ children }: { children: ReactNode }) => {
+const Sidebar = ({ children }: { children: React.ReactNode }) => {
   const navigate = useNavigate();
   const theme = useTheme();
-  const [open, setOpen] = React.useState<boolean>(false);
+  const [open, setOpen] = React.useState(false);
+  const [dialogOpen, setDialogOpen] = React.useState(false);
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -105,9 +89,12 @@ const Sidebar = ({ children }: { children: ReactNode }) => {
     setOpen(false);
   };
 
-  const handleClick = (e: React.MouseEvent) => {
-    e.preventDefault();
-    console.log("No action for this item.");
+  const handleDialogOpen = () => {
+    setDialogOpen(true);
+  };
+
+  const handleDialogClose = () => {
+    setDialogOpen(false);
   };
 
   const handleLogout = () => {
@@ -125,16 +112,11 @@ const Sidebar = ({ children }: { children: ReactNode }) => {
             aria-label="open drawer"
             onClick={handleDrawerOpen}
             edge="start"
-            sx={[
-              {
-                mr: 2,
-              },
-              open && { display: "none" },
-            ]}
+            sx={{ mr: 2, ...(open && { display: "none" }) }}
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" noWrap component="div">
+          <Typography variant="h6" noWrap>
             Task Assigning System
           </Typography>
         </Toolbar>
@@ -146,7 +128,6 @@ const Sidebar = ({ children }: { children: ReactNode }) => {
           "& .MuiDrawer-paper": {
             width: drawerWidth,
             boxSizing: "border-box",
-            transition: "width 0.3s ease",
           },
         }}
         variant="persistent"
@@ -164,8 +145,15 @@ const Sidebar = ({ children }: { children: ReactNode }) => {
         </DrawerHeader>
         <Divider />
         <List>
+          <ListItem disablePadding>
+            <ListItemButton onClick={handleDialogOpen}>
+              <ListItemIcon>
+                <AddTaskIcon />
+              </ListItemIcon>
+              <ListItemText primary="Add Task" />
+            </ListItemButton>
+          </ListItem>
           {[
-            { name: "Add Task", icon: <AddTaskIcon /> },
             { name: "Total Task", icon: <SubjectIcon /> },
             { name: "Task History", icon: <HistoryIcon /> },
             { name: "Drafts", icon: <DraftsIcon /> },
@@ -181,20 +169,14 @@ const Sidebar = ({ children }: { children: ReactNode }) => {
         <Divider />
         <List>
           {[
-            {
-              name: "Account Settings",
-              icon: <SettingsIcon />,
-              onclick: handleClick,
-            },
-            {
-              name: "Preferences",
-              icon: <AssignmentIndIcon />,
-              onclick: handleClick,
-            },
-            { name: "Logout", icon: <LogoutIcon />, onclick: handleLogout },
+            { name: "Account Settings", icon: <SettingsIcon /> },
+            { name: "Preferences", icon: <AssignmentIndIcon /> },
+            { name: "Logout", icon: <LogoutIcon /> },
           ].map((data, index) => (
             <ListItem key={index} disablePadding>
-              <ListItemButton onClick={data.onclick}>
+              <ListItemButton
+                onClick={data.name === "Logout" ? handleLogout : undefined}
+              >
                 <ListItemIcon>{data.icon}</ListItemIcon>
                 <ListItemText primary={data.name} />
               </ListItemButton>
@@ -202,7 +184,42 @@ const Sidebar = ({ children }: { children: ReactNode }) => {
           ))}
         </List>
       </Drawer>
-      <Main open={open}>{children}</Main>
+      <Main open={open}>
+        <DrawerHeader />
+        {children}
+      </Main>
+      <Dialog open={dialogOpen} onClose={handleDialogClose}>
+        <DialogTitle>Add Task</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Enter the details for the new task you want to add.
+          </DialogContentText>
+          <TextField
+            autoFocus
+            required
+            margin="dense"
+            id="taskName"
+            name="taskName"
+            label="Task Name"
+            type="text"
+            fullWidth
+            variant="standard"
+          />
+          <TextField
+            margin="dense"
+            id="taskDescription"
+            name="taskDescription"
+            label="Task Description"
+            type="text"
+            fullWidth
+            variant="standard"
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleDialogClose}>Cancel</Button>
+          <Button onClick={handleDialogClose}>Add Task</Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 };
