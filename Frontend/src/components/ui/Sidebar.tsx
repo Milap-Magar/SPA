@@ -31,6 +31,7 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
+import AddTaskDialog from "../model/AddTaskDialog";
 
 const drawerWidth = 240;
 
@@ -96,6 +97,8 @@ const Sidebar = ({ children }: { children: React.ReactNode }) => {
   const handleDialogClose = () => {
     setDialogOpen(false);
   };
+
+  const handleAddTask = () => {};
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -188,38 +191,7 @@ const Sidebar = ({ children }: { children: React.ReactNode }) => {
         <DrawerHeader />
         {children}
       </Main>
-      <Dialog open={dialogOpen} onClose={handleDialogClose}>
-        <DialogTitle>Add Task</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            Enter the details for the new task you want to add.
-          </DialogContentText>
-          <TextField
-            autoFocus
-            required
-            margin="dense"
-            id="taskName"
-            name="taskName"
-            label="Task Name"
-            type="text"
-            fullWidth
-            variant="standard"
-          />
-          <TextField
-            margin="dense"
-            id="taskDescription"
-            name="taskDescription"
-            label="Task Description"
-            type="text"
-            fullWidth
-            variant="standard"
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleDialogClose}>Cancel</Button>
-          <Button onClick={handleDialogClose}>Add Task</Button>
-        </DialogActions>
-      </Dialog>
+      <AddTaskDialog open={dialogOpen} onClose={handleDialogClose} />
     </Box>
   );
 };

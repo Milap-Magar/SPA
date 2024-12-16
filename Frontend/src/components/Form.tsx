@@ -189,7 +189,7 @@ const Form = ({ isRegister }: { isRegister: boolean }) => {
       });
 
       const { token, user } = response.data.login;
-      console.log("token: ", token);
+      // console.log("token: ", token);
       localStorage.setItem("token", token);
       setUser(user);
 

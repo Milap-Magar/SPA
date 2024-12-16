@@ -33,3 +33,9 @@ export const LOGIN_MUTATION = gql`
     }
   }
 `;
+
+// export const ADD_TASK = gql`
+// mutation addTask($id: String!, $taskTitle: String!, $taskDescription: String!, $dueDate: String! )
+// {
+//   createTask()
+// }`;
