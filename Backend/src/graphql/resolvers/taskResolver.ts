@@ -2,87 +2,60 @@ import Task from "../../models/Task";
 
 export const taskResolvers = {
   Query: {
-    tasks: async () => {
-      try {
-        return await Task.find();
-      } catch (error) {
-        throw new Error("Error fetching tasks");
+    tasks: async (
+      _: any,
+      {
+        page = 1,
+        limit = 10,
+        search = "",
+        sortBy = "createAt",
+        sortOrder = "desc",
+      }: {
+        page?: number;
+        limit?: number;
+        search?: string;
+        sortBy?: string;
+        sortOrder?: "asc" | "desc";
       }
-    },
-    task: async (_: any, { id }: { id: string }) => {
+    ) => {
       try {
-        return await Task.findById(id);
-      } catch (error) {
-        throw new Error("Error fetching task");
+        const filter = search
+          ? {
+              $or: [
+                { title: { $regex: search, $options: "i" } },
+                { description: { $regex: search, $options: "i" } },
+              ],
+            }
+          : {};
+
+        const totalCount = await Task.countDocuments(filter);
+        const totalPages = Math.ceil(totalCount / limit);
+        const tasks = await Task.find(filter)
+          .sort({ [sortBy]: sortOrder === "asc" ? 1 : -1 })
+          .skip((page - 1) * limit)
+          .limit(limit);
+
+        return {
+          edges: tasks,
+          pageInfo: {
+            currentPage: page,
+            totalPages,
+            totalCount,
+          },
+        };
+      } catch (error: any) {
+        throw new Error(`Error fetching tasks: ${error.message}`);
       }
     },
   },
 
   Mutation: {
-    createTask: async (
-      _: any,
-      {
-        title,
-        description,
-        dueDate,
-        status,
-      }: { title: string; description: string; dueDate: string; status: string }
-    ) => {
+    addTask: async (_: any, { input }: { input: typeof Task }) => {
       try {
-        const newTask = new Task({
-          title,
-          description,
-          dueDate,
-          status,
-        });
+        const newTask = new Task(input);
         return await newTask.save();
-      } catch (error) {
-        throw new Error("Error in creating Task");
-      }
-    },
-    updateTask: async (
-      _: any,
-      {
-        id,
-        title,
-        description,
-        dueDate,
-        status,
-      }: {
-        id: string;
-        title?: string;
-        description: string;
-        dueDate: string;
-        status: string;
-      }
-    ) => {
-      try {
-        const task = await Task.findById(id);
-        if (!task) {
-          throw new Error("404: Task NOT FOUND ");
-        }
-        task.title = title || task.title;
-        task.description = description || task.description;
-        task.dueDate = dueDate || task.dueDate;
-        task.status = status || task.status;
-
-        return await task.save();
-      } catch (error) {
-        throw new Error("Error Updating Task");
-      }
-    },
-    deleteTask: async (_: any, { id }: { id: string }) => {
-      try {
-        const task = await Task.findById(id);
-
-        if (!task) {
-          throw new Error("Task not found");
-        }
-        await task.deleteOne({ _id: id });
-        return true;
-      } catch (error) {
-        console.error("Error deleting task", error);
-        return false;
+      } catch (error: any) {
+        throw new Error(`Error creating task: ${error.message}`);
       }
     },
   },

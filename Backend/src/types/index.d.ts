@@ -11,6 +11,7 @@ export interface IUser extends Document {
   isValidPassword(password: string): Promise<boolean>;
   [key: string]: any;
 }
+
 export interface RegisterUserInput {
   email: string;
   password: string;
@@ -22,13 +23,23 @@ export interface RegisterUserInput {
 
 // TASK
 export interface ITask extends Document {
+  id: string;
   title: string;
   description: string;
-  dueDate: string;
+  category: String;
+  assignTo: String;
+  priority: String;
+  deadlineAt: String;
+  createdAt?: String;
+  updatedAt?: String;
   status: string;
-  createdAt: Date;
-  updatedAt: Date;
 }
+
+type Mutation {
+  addTask(input: TaskInput!): Task
+}
+
+
 export interface Task {
   id: string;
   title: string;

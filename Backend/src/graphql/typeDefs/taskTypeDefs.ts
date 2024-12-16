@@ -1,4 +1,3 @@
-import { Task } from "./../../types/index.d";
 import { gql } from "apollo-server-express";
 
 export const taskTypeDefs = gql`
@@ -6,8 +5,21 @@ export const taskTypeDefs = gql`
     id: ID!
     title: String!
     description: String!
-    dueDate: String!
+    category: String!
+    assignTo: String!
+    priority: String!
+    deadlineAt: String!
+    createAt: String!
     status: String!
+  }
+  type Query {
+    tasks(
+      page: Int
+      limit: Int
+      search: String
+      sortBy: String
+      sortOrder: String
+    ): TaskConnection!
   }
 
   type PageInfo {
@@ -20,7 +32,7 @@ export const taskTypeDefs = gql`
     edges: [Task]!
     pageInfo: PageInfo!
   }
-
+  
   type Query {
     tasks(
       page: Int
@@ -32,20 +44,18 @@ export const taskTypeDefs = gql`
     task(id: ID!): Task
   }
 
+  input TaskInput {
+    title: String!
+    description: String!
+    category: String!
+    assignTo: String!
+    priority: String!
+    deadlineAt: String!
+    createAt: String!
+    status: String!
+  }
+
   type Mutation {
-    createTask(
-      title: String!
-      description: String!
-      dueDate: String!
-      status: String!
-    ): Task
-    updateTask(
-      id: ID!
-      title: String!
-      description: String!
-      dueDate: String!
-      status: String!
-    ): Task
-    deleteTask(id: ID!): Boolean
+    addTask(input: TaskInput!): Task
   }
 `;
