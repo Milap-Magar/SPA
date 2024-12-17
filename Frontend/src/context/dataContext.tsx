@@ -23,6 +23,7 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
             email
             phone
             address
+            position
           }
         }
       `;
@@ -32,7 +33,7 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
       };
 
       const response = await AxiosInstance.post("/", requestBody);
-      setUserData(response.data.data.userID); 
+      setUserData(response.data.data.userID);
     } catch (error) {
       console.error("Error fetching user:", error);
     } finally {

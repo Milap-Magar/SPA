@@ -11,6 +11,7 @@ declare interface FormRegister {
   password: string;
   address: string;
   phone: number;
+  position: string;
 }
 
 export interface IUser extends Document {
@@ -29,6 +30,7 @@ export declare interface userContextType {
     phone: string;
   } | null;
   setUser: React.Dispatch<React.SetStateAction<userContextType["user"]>>;
+  position: string;
 }
 declare interface User {
   id: string;
@@ -36,6 +38,7 @@ declare interface User {
   email: string;
   address?: string;
   phone?: string;
+  position?: string;
 }
 
 declare interface DataContextType {

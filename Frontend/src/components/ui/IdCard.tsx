@@ -9,6 +9,9 @@ import {
 import styled from "styled-components";
 import dp from "../../assets/dp.svg";
 
+import { useData } from "../../hooks/useData";
+import Loading from "./Loading";
+
 const Label = styled.label`
   font-size: 0.8rem;
   font-weight: bold;
@@ -16,16 +19,10 @@ const Label = styled.label`
 `;
 
 const IdCard = () => {
-  const userData = {
-    name: "Jonathan Smith",
-    id: "000123456",
-    address: "Kusunti, Lalitpur",
-    phone: "+1 (123) 456-789",
-    joinDate: "01-02-2019",
-    expireDate: "01-02-2029",
-  };
+  const { loading, userData } = useData();
+  // console.log(userData);
 
-  const { name, id, address, phone, joinDate, expireDate } = userData;
+  if (loading) return <Loading />;
 
   return (
     <Box
@@ -59,7 +56,7 @@ const IdCard = () => {
         >
           <Avatar
             src={dp}
-            alt={name}
+            alt={userData?.name}
             sx={{
               width: 100,
               height: 100,
@@ -76,33 +73,33 @@ const IdCard = () => {
               fontWeight: "bold",
             }}
           >
-            {name}
+            {userData?.name}
           </Typography>
           <Typography variant="body2" sx={{ color: "#ddd" }}>
-            Graphic Designer
+            {userData?.position}
           </Typography>
         </Box>
 
         <CardContent>
           <Typography variant="body1" sx={{ mt: 1 }}>
-            <Label>ID NO: </Label> {id}
+            <Label>ID NO: </Label> {userData?.id}
           </Typography>
           <Typography variant="body1" sx={{ mt: 1 }}>
-            <Label>PHONE: </Label> {phone}
+            <Label>PHONE: </Label> {userData?.phone}
           </Typography>
           <Typography variant="body1" sx={{ mt: 1 }}>
-            <Label>ADDRESS: </Label> {address}
+            <Label>ADDRESS: </Label> {userData?.address}
           </Typography>
 
           <Divider sx={{ my: 2 }} />
 
           <Box>
             <Typography variant="body2" sx={{ fontWeight: "bold" }}>
-              JOIN DATE: <span style={{ color: "#1976D2" }}>{joinDate}</span>
+              {/* JOIN DATE: <span style={{ color: "#1976D2" }}>{joinDate}</span> */}
             </Typography>
             <Typography variant="body2" sx={{ fontWeight: "bold", mt: 1 }}>
               EXPIRE DATE:{" "}
-              <span style={{ color: "#D32F2F" }}>{expireDate}</span>
+              {/* <span style={{ color: "#D32F2F" }}>{expireDate}</span> */}
             </Typography>
           </Box>
         </CardContent>

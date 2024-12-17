@@ -122,6 +122,7 @@ interface FormRegister extends FormLogin {
   name: string;
   address: string;
   phone: string;
+  position: string;
 }
 
 const Form = ({ isRegister }: { isRegister: boolean }) => {
@@ -134,9 +135,13 @@ const Form = ({ isRegister }: { isRegister: boolean }) => {
           name: "",
           address: "",
           phone: "",
+          position: "",
         }
       : { email: "", password: "", role: "user" }
   );
+
+  // console.log(formData);
+
   const { setUser } = useUser();
   const navigate = useNavigate();
 
@@ -167,13 +172,16 @@ const Form = ({ isRegister }: { isRegister: boolean }) => {
           role: registerData.role,
           address: registerData.address,
           phone: processedPhone.toString(),
+          position: registerData.position,
         },
       });
+      // console.log(response);
 
       toast.success("Registration Successful!");
       navigate("/");
     } catch (error: any) {
       toast.error(`Registration Failed: ${error.message}`);
+      console.error("error", error);
     }
   };
 
@@ -279,6 +287,16 @@ const Form = ({ isRegister }: { isRegister: boolean }) => {
                   id="phone"
                   name="phone"
                   value={(formData as FormRegister).phone}
+                  onChange={handleChange}
+                />
+              </div>
+              <div>
+                <Label htmlFor="position">Position</Label>
+                <Input
+                  type="text"
+                  id="position"
+                  name="position"
+                  value={(formData as FormRegister).position}
                   onChange={handleChange}
                 />
               </div>

@@ -8,6 +8,7 @@ export const REGISTER_MUTATION = gql`
     $role: String!
     $address: String!
     $phone: String!
+    $position: String!
   ) {
     register(
       email: $email
@@ -16,12 +17,14 @@ export const REGISTER_MUTATION = gql`
       name: $name
       address: $address
       phone: $phone
+      position: $position
     ) {
       id
       name
       email
       address
       phone
+      position
     }
   }
 `;
