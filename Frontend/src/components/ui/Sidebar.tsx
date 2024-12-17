@@ -79,7 +79,7 @@ const DrawerHeader = styled("div")(({ theme }) => ({
 const Sidebar = ({ children }: { children: React.ReactNode }) => {
   const navigate = useNavigate();
   const theme = useTheme();
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = React.useState(true);
   const [dialogOpen, setDialogOpen] = React.useState(false);
 
   const handleDrawerOpen = () => {
@@ -97,8 +97,6 @@ const Sidebar = ({ children }: { children: React.ReactNode }) => {
   const handleDialogClose = () => {
     setDialogOpen(false);
   };
-
-  const handleAddTask = () => {};
 
   const handleLogout = () => {
     localStorage.removeItem("token");

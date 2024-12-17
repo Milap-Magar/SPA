@@ -191,10 +191,9 @@ const Form = ({ isRegister }: { isRegister: boolean }) => {
       const { token, user } = response.data.login;
       // console.log("token: ", token);
       localStorage.setItem("token", token);
+      // toast.success(`Logged in as ${user.name}`);
       setUser(user);
-
       navigate("/dashboard");
-      toast.success(`Logged in as ${user.name}`);
     } catch (error: any) {
       toast.error(`Error Logging In: ${error.message}`);
     }

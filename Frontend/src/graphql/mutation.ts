@@ -34,6 +34,20 @@ export const LOGIN_MUTATION = gql`
   }
 `;
 
+export const ADD_TASK = gql`
+  mutation AddTask($input: TaskInput!) {
+    addTask(input: $input) {
+      id
+      title
+      description
+      category
+      assignTo
+      priority
+      deadlineAt
+      status
+    }
+  }
+`;
 // export const ADD_TASK = gql`
 // mutation addTask($id: String!, $taskTitle: String!, $taskDescription: String!, $dueDate: String! )
 // {
