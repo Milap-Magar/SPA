@@ -24,13 +24,6 @@ import SettingsIcon from "@mui/icons-material/Settings";
 import AssignmentIndIcon from "@mui/icons-material/AssignmentInd";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { useNavigate } from "react-router-dom";
-import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
-import DialogTitle from "@mui/material/DialogTitle";
-import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
 import AddTaskDialog from "../model/AddTaskDialog";
 
 const drawerWidth = 240;
@@ -79,7 +72,7 @@ const DrawerHeader = styled("div")(({ theme }) => ({
 const Sidebar = ({ children }: { children: React.ReactNode }) => {
   const navigate = useNavigate();
   const theme = useTheme();
-  const [open, setOpen] = React.useState(true);
+  const [open, setOpen] = React.useState(false);
   const [dialogOpen, setDialogOpen] = React.useState(false);
 
   const handleDrawerOpen = () => {
